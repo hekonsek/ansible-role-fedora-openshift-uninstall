@@ -13,10 +13,6 @@ This playbook has been tested against Fedora 25.
 
     ansible-galaxy install hekonsek.fedora-openshift-uninstall,0.0
 
-## Variables
-
-- `project_name` - Kubernetes project name to use. Default is `default`.
-
 ## Example playbook
 
     - hosts: localhost
