@@ -1,0 +1,32 @@
+- name: Make sure OpenShift is not running
+  systemd:
+    name: openshift
+    state: stopped
+    enabled: no
+
+- name: Umount volumes
+  shell: for i in `mount | grep /var/openshift | awk '{print $3}'`; do umount $i; done
+
+- name: Uninstall OpenShift binaries
+  file: path=/usr/openshift state=absent
+
+- name: Remove OpenShift runtime directory
+  file: path=/var/openshift state=absent
+
+- name: Remove OpenShift service
+  file: path=/etc/systemd/system/openshift.service state=absent
+
+- name: Remove OpenShift configuration
+  file: path=/openshift.local.config state=absent
+
+- name: Remove OpenShift admin client cache
+  file: path=/root/.kube state=absent
+
+- name: Remove OpenShift client
+  file: path=/usr/bin/oc state=absent
+
+- name: Remove OpenShift admin client
+  file: path=/usr/bin/oadm state=absent
+
+- name: Remove OpenShift Docker containers
+  shell: docker rm -f $(docker ps | grep openshift/ | awk '{print $1}')
